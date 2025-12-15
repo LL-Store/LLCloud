@@ -11,6 +11,8 @@ npm run start:dev
 
 然后浏览器访问： ```http://127.0.0.1:30000/index.html```
 
+> 别忘了配置 `./src/config.ts` 中的邮箱SMTP信息。
+
 ## 生产环境
 
 开发完毕以后，需要发布的话，首先进行打包：
@@ -24,6 +26,8 @@ npm run build
 ```
 npm run start:prod
 ```
+
+> 别忘了配置 `./dist/config.js` 中的邮箱SMTP信息。
 
 ## 版权
 

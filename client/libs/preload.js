@@ -16,6 +16,13 @@
 
         /* 配置文件 */
         'libs/config.js', // 项目配置文件
+
+        /* 过滤器 */
+        'libs/modules/filters/versionFlt.js', // 在文本的结尾追加版本号
+
+        /* 服务 */
+        'libs/modules/services/$fetch.js', // 和后台通信的请求方法
+        'libs/modules/services/$url.js', // 浏览器地址相关方法
     ];
 
     if (typeof (exports) != "undefined") {
