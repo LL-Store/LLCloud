@@ -33,6 +33,11 @@
             z-index: 1;
         }
     </style>
+    <script>
+        if (localStorage.getItem("isLogin") == 'yes') {
+            sessionStorage.setItem("isLogin", localStorage.getItem("isLogin"));
+        }
+    </script>
 </head>
 
 <body>

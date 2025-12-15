@@ -3,6 +3,8 @@ const compressing = require("compressing")
 const pkg = require("../package.json")
 
 deleteSync("./LLCloud")
+deleteSync("./userlogin")
+deleteSync("./client/userspace")
 
 copySync("./dist", "./LLCloud/dist")
 copySync("./client", "./LLCloud/client")

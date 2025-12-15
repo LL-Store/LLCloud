@@ -1,6 +1,10 @@
 const { join } = require("path")
 
 export default {
+    data: {
+        folder: "userspace",
+        path: join(__dirname, '../client/userspace/')
+    },
     user: {
         path: join(__dirname, '../userlogin/')
     },
