@@ -4,7 +4,7 @@ const pkg = require("../package.json")
 
 deleteSync("./LLCloud")
 deleteSync("./userlogin")
-deleteSync("./client/userspace")
+deleteSync("./userspace")
 
 copySync("./dist", "./LLCloud/dist")
 copySync("./client", "./LLCloud/client")

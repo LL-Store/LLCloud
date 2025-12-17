@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, UploadedFile, UseInterceptors, Body, Request } from '@nestjs/common'
+import { Controller, Get, Post, Query, UploadedFile, UseInterceptors, Body, Request, Response } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { DistService } from './dist.service'
 import { SecurityService } from '../verification/security.service'
@@ -211,7 +211,30 @@ export class HandlerController {
             }
 
         } else {
-            return Promise.resolve({
+            return {
+                code: '-1',
+                msg: "登录失效"
+            }
+        }
+
+    }
+
+    // 文件路径
+    @Get('/urlFile')
+    urlFile(@Query() query: {
+        path: string
+    }, @Request() req: any, @Response() res): any {
+
+        if (this.securityService.isLogin(req.header("cookie"))) {
+            let filePath = join(contextPath, query.path)
+            let fileInfo = fs.statSync(filePath)
+
+            res.setHeader('Content-Length', fileInfo.size) // 文件大小
+            res.setHeader('x-powered-by', 'LLCloud') // 服务提供者
+
+            fs.createReadStream(filePath).pipe(res)
+        } else {
+            res.json({
                 code: '-1',
                 msg: "登录失效"
             })
@@ -219,25 +242,39 @@ export class HandlerController {
 
     }
 
-    // 读取文本
-    @Get('/readPlainFile')
-    readPlainFile(@Query() query: {
-        fullPath: string
-    }, @Request() req: any): any {
-        if (this.securityService.isLogin(req.header("cookie"))) {
+    // 读取文件
+    @Get('/readFile')
+    readFile(@Query() query: {
+        path: string
+    }, @Request() req: any, @Response() res): any {
 
-            return {
-                code: '000000',
-                msg: fs.readFileSync(join(contextPath, query.fullPath), {
-                    encoding: "utf8"
+        if (this.securityService.isLogin(req.header("cookie"))) {
+            let filePath = join(contextPath, query.path)
+            let fileInfo = fs.statSync(filePath)
+
+            // 如果文件小于10M，认为不大，直接读取
+            if (fileInfo.size < 10 * 1024 * 1024) {
+
+                res.json({
+                    code: '000000',
+                    msg: fs.readFileSync(filePath, {
+                        encoding: "utf8"
+                    })
+                })
+
+            } else {
+                res.json({
+                    code: '-1',
+                    msg: "文件过大，不支持"
                 })
             }
 
         } else {
-            return Promise.resolve({
+            res.json({
                 code: '-1',
                 msg: "登录失效"
             })
         }
+
     }
 }

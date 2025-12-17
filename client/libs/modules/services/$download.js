@@ -10,7 +10,7 @@
             // 下载单个文件
             downloadFile: function (filename, filepath) {
                 var aEl = document.createElement("a");
-                aEl.href = "/" + window.systemInfo.data.folder + "/" + filepath;
+                aEl.href = "/handler/urlFile?path=/" + filepath;
                 aEl.download = filename;
                 aEl.click();
             }

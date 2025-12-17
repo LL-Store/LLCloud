@@ -79,12 +79,12 @@ ctrlapp.register.controller('IndexController', ['$scope', '$fetch', '$url', '$up
                 // 视频
                 if (/^video/.test(item.type)) {
                     $scope.showFileType = true;
-                    $scope.videoSrc = "/" + window.systemInfo.data.folder + "/" + $scope.currentPath + item.name;
+                    $scope.videoSrc = "/handler/urlFile?path=" + $scope.currentPath + item.name;
                 }
 
                 // 文本
                 else if (/^text/.test(item.type) || ['application/json', 'application/javascript'].indexOf(item.type) > -1) {
-                    $fetch.get("/handler/readPlainFile?fullPath=" + $scope.currentPath + item.name).then(function (res) {
+                    $fetch.get("/handler/readFile?path=" + $scope.currentPath + item.name).then(function (res) {
                         $scope.showFileType = true;
                         $scope.plainContent = res.msg;
                         $scope.$digest();
@@ -94,7 +94,7 @@ ctrlapp.register.controller('IndexController', ['$scope', '$fetch', '$url', '$up
                 // 图片
                 else if (/^image/.test(item.type)) {
                     $scope.showFileType = true;
-                    $scope.imgSrc = "/" + window.systemInfo.data.folder + "/" + $scope.currentPath + item.name;
+                    $scope.imgSrc = "/handler/urlFile?path=" + $scope.currentPath + item.name;
                 }
 
                 // 否则还没有支持
@@ -153,7 +153,7 @@ ctrlapp.register.controller('IndexController', ['$scope', '$fetch', '$url', '$up
         if (item.isDirectory) {
             // 文件夹下载先不支持
         } else {
-            event.originalEvent.dataTransfer.setData("DownloadURL", "text/plain:" + item.name + ":" + window.location.origin + url.replace(/^\./, '/' + window.systemInfo.data.folder));
+            event.originalEvent.dataTransfer.setData("DownloadURL", "text/plain:" + item.name + ":" + window.location.origin + url.replace(/^\./, "/handler/readFile?path="));
             console.log("<文件>下载：" + url);
         }
     };

@@ -8,10 +8,7 @@ import config from './config'
 const rootPath = require('path').join(__dirname, '../client')
 
 fs.writeFileSync("./client/libs/system.info.js", `window.systemInfo = {
-  "version": "${require('../package.json').version}",
-  "data": {
-    folder: "${config.data.folder}"
-  }
+  "version": "${require('../package.json').version}"
 };`)
 
 // 上传文件存放位置
