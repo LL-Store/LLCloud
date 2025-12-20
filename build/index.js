@@ -1,4 +1,3 @@
-const { copySync, deleteSync, log, error } = require("devby")
 const compressing = require("compressing")
 const pkg = require("../package.json")
 

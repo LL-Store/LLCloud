@@ -4,7 +4,7 @@ import { DistService } from './dist.service'
 import { SecurityService } from '../verification/security.service'
 import * as fs from 'fs'
 
-const devby = require('devby')
+const { deleteDisk, copyDisk, moveDisk, listDisk } = require("oipage/nodejs/disk/index.js");
 const { join } = require('path')
 
 declare type resultType = {
@@ -49,7 +49,7 @@ export class HandlerController {
             let targetPath = join(contextPath, body.path, decodeURIComponent(body.filepath))
             this.distService.writeFileSync(targetPath, file.buffer)
 
-            devby.warn(new Date().toLocaleString() + " 文件上传: ./" + join(body.path, decodeURIComponent(body.filepath)))
+            console.log(new Date().toLocaleString() + " 文件上传: ./" + join(body.path, decodeURIComponent(body.filepath)))
             return {
                 code: '000000',
                 msg: "上传成功"
@@ -77,17 +77,19 @@ export class HandlerController {
             // 一个个片段保存起来
             this.distService.writeFileSync(targetPath + "_" + body.index + "_LLCloudCache", file.buffer)
 
-            devby.warn(new Date().toLocaleString() + " 分片上传（" + index + "/" + total + "）: ./" + join(body.path, decodeURIComponent(body.filepath)))
+            console.log(new Date().toLocaleString() + " 分片上传（" + index + "/" + total + "）: ./" + join(body.path, decodeURIComponent(body.filepath)))
 
             // 如果全部上传完成，合并
             if (index >= total) {
 
                 // 一个个拼接起来
                 let fd = fs.openSync(targetPath, 'a')
+                fs.writeFileSync(fd, "")
                 for (let index = 0; index < total; index++) {
 
-                    let buff = fs.readFileSync(targetPath + '_' + index + "_LLCloudCache")
-                    fs.writeSync(fd, buff, 0, buff.length, (0 - -body.size) * index)
+                    let buff: Uint8Array = fs.readFileSync(targetPath + '_' + index + "_LLCloudCache") as Uint8Array
+                    // fs.writeSync(fd, buff, 0, buff.length, (0 - -body.size) * index)
+                    fs.appendFileSync(fd, buff)
 
                     // 使用完毕后删除片段
                     fs.unlinkSync(targetPath + '_' + index + "_LLCloudCache")
@@ -121,14 +123,16 @@ export class HandlerController {
         if (this.securityService.isLogin(req.header("cookie"))) {
 
             if (query.type == 'copy') {
-                devby.copySync(
+                copyDisk(
                     join(contextPath, query.sourcePath, query.sourceName),
-                    join(contextPath, query.targetPath, query.sourceName)
+                    join(contextPath, query.targetPath, query.sourceName),
+                    true
                 )
             } else {
-                devby.moveSync(
+                moveDisk(
                     join(contextPath, query.sourcePath, query.sourceName),
-                    join(contextPath, query.targetPath, query.sourceName)
+                    join(contextPath, query.targetPath, query.sourceName),
+                    true
                 )
             }
 
@@ -203,7 +207,7 @@ export class HandlerController {
 
         if (this.securityService.isLogin(req.header("cookie"))) {
 
-            devby.deleteSync(join(contextPath, query.fullPath))
+            deleteDisk(join(contextPath, query.fullPath))
 
             return {
                 code: '000000',

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { formatByte, formatTime } from '../tool/format'
+import mimeTypes from '../tool/mime.types'
 
-const devby = require('devby')
 const { join } = require("path")
 const { existsSync, mkdirSync, readdirSync, writeFileSync, statSync } = require('fs')
 const compressing = require('compressing')
@@ -16,7 +16,7 @@ export class DistService {
 
     // 获取文件列表
     getFileList(filePath: string): any {
-        devby.log(new Date().toLocaleString() + " 当前访问: " + filePath.replace(contextPath, './'))
+        console.log(new Date().toLocaleString() + " 当前访问: " + filePath.replace(contextPath, './'))
 
         // 读取子文件
         const subFiles = readdirSync(filePath)
@@ -36,7 +36,7 @@ export class DistService {
                     isDirectory: isDir,
                     mtime: formatTime(statObj.mtime),
                     size: isDir ? "" : formatByte(statObj.size),
-                    type: devby.mimeTypes[dotName] || "text/plain"
+                    type: mimeTypes[dotName] || "text/plain"
                 })
 
             }
