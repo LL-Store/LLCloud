@@ -1,6 +1,7 @@
 const { join } = require("path")
 
 export default {
+    port: 30000, // 端口号
     data: {
         folder: "userspace",
         path: join(__dirname, '../userspace/')

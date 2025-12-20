@@ -1,6 +1,20 @@
 # [LLCloud](https://github.com/LL-Store/LLCloud)
 🔥 文件或文件夹的上传、下载、ZIP文件压缩与解压、在线查看等
 
+## 主要功能
+
+### 用户界面
+
+用户的登录、注册、找回密码
+
+<img src="./snipping/login.jpeg" />
+
+### 文件管理
+
+文件或文件夹的上传、下载、打开、预览、解压缩、拖拽删除、复制、粘贴、剪切等
+
+<img src="./snipping/upload.jpeg" />
+
 ## 如何开发
 
 开发的时候，直接运行如下命令：
