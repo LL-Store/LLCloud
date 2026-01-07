@@ -279,8 +279,12 @@ ctrlapp.register.controller('IndexController', ['$scope', '$fetch', '$url', '$up
 
     // 右键菜单 / 解压
     $scope.doUnzip = function () {
-        $fetch.get("/handler/unzip?sourcePath=" + $scope.currentPath + "&sourceName=" + $scope.rightmenu.value).then(function (res) {
-            $scope.doFresh(res.msg);
+        let currentFile = $scope.rightmenu.value
+        setTimeout(function () {
+            if (confirm("确定解压 " + currentFile + " ？"))
+                $fetch.get("/handler/unzip?sourcePath=" + $scope.currentPath + "&sourceName=" + currentFile).then(function (res) {
+                    $scope.doFresh(res.msg);
+                });
         });
     };
 

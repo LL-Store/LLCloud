@@ -1,24 +1,25 @@
 const compressing = require("compressing")
+const { deleteDisk, copyDisk } = require("oipage/nodejs/disk/index.js");
 const pkg = require("../package.json")
 
-deleteSync("./LLCloud")
-deleteSync("./userlogin")
-deleteSync("./userspace")
+deleteDisk("./LLCloud")
+deleteDisk("./userlogin")
+deleteDisk("./userspace")
 
-copySync("./dist", "./LLCloud/dist")
-copySync("./client", "./LLCloud/client")
-copySync("./.mailmap", "./LLCloud/.mailmap")
-copySync("./AUTHORS.txt", "./LLCloud/AUTHORS.txt")
-copySync("./CHANGELOG", "./LLCloud/CHANGELOG")
-copySync("./LICENSE", "./LLCloud/LICENSE")
-copySync("./package.json", "./LLCloud/package.json")
-copySync("./package-lock.json", "./LLCloud/package-lock.json")
-copySync("./README.md", "./LLCloud/README.md")
+copyDisk("./dist", "./LLCloud/dist")
+copyDisk("./client", "./LLCloud/client")
+copyDisk("./.mailmap", "./LLCloud/.mailmap")
+copyDisk("./AUTHORS.txt", "./LLCloud/AUTHORS.txt")
+copyDisk("./CHANGELOG", "./LLCloud/CHANGELOG")
+copyDisk("./LICENSE", "./LLCloud/LICENSE")
+copyDisk("./package.json", "./LLCloud/package.json")
+copyDisk("./package-lock.json", "./LLCloud/package-lock.json")
+copyDisk("./README.md", "./LLCloud/README.md")
 
 compressing.zip.compressDir("./LLCloud", "./LLCloud-v" + pkg.version + ".zip").then(() => {
-    deleteSync("./LLCloud")
+    deleteDisk("./LLCloud")
 
-    log("打包完成\n")
+    console.log("打包完成\n")
 }).catch((e) => {
-    error(e)
+    console.error(e)
 })
